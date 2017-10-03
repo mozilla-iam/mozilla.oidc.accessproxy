@@ -1,0 +1,4 @@
+version: '2'
+services:
+    accessproxy:
+        image: 656532927350.dkr.ecr.us-west-2.amazonaws.com/mozilla.oidc.accessproxy:latest

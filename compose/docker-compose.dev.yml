@@ -1,0 +1,6 @@
+version: '2'
+services:
+    accessproxy:
+        env_file:
+            - development.env
+            - local.env

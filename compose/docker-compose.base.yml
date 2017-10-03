@@ -1,0 +1,26 @@
+version: '2'
+services:
+    accessproxy:
+        volumes:
+            - sessions:/var/tmp/sessions
+        restart: always
+        expose:
+            - 80
+        ports:
+            - 80:80
+        networks:
+            - default
+# Add an app here!
+#   myapp:
+#       restart: always
+#       links:
+#           - accessproxy
+#       ports:
+#           - 8080:8080
+#       networks:
+#           - default
+volumes:
+    sessions:
+
+networks:
+    default:

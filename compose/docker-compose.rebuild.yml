@@ -1,0 +1,7 @@
+version: '2'
+services:
+    accessproxy:
+        build:
+            context: ../
+            dockerfile: Dockerfile
+        image: mozilla.oidc.accessproxy:latest
