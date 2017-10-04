@@ -5,7 +5,7 @@ sudo: required
 services:
   - docker
 before_install:
-  - cd Docker && make
+  - make
   - make compose-detach
 script:
   - echo -en "GET /health HTTP/1.0\r\n\r\n" > /dev/tcp/127.0.0.1/80 

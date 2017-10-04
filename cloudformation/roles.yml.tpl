@@ -25,7 +25,7 @@ Resources:
           Ref: $NAME$Role
   $NAME$CodePipelineAccess:
     Type: "AWS::IAM::Policy"
-    DependsOn: $NAMERole
+    DependsOn: $NAME$Role
     Properties:
       PolicyDocument:
         Version: "2012-10-17"
