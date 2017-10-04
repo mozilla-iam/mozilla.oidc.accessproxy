@@ -29,6 +29,7 @@ run: Dockerfile
 
 awslogin: Dockerfile build
 	# See also https://us-west-2.console.aws.amazon.com/ecs/home?region=us-west-2#/firstRun
+	# If you do not yet have a HUB_URL and repository created you'll have to do so above
 	@echo "Logging you in the hub at $(HUB_URL)"
 	aws ecr get-login --no-include-email --region us-west-2  | grep -v MFA | bash
 	@echo "Tagging latest built image"

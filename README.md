@@ -23,6 +23,15 @@ You can manually start this as such, if you like:
 $ docker run -p 8080:80 -e discovery_url=localhost -e client_id=1 -e client_secret=1 -ti openresty.mozilla.accessproxy:latest
 ```
 
+### AWS Deployment
+
+- Read `cloudformation/README.md` and follow it's instructions
+- Create a repository in ECR for the Docker image by following instructions at
+  `https://us-west-2.console.aws.amazon.com/ecs/home?region=us-west-2#/repositories/create/new` (or another region)
+- Replace HUB_URL in the `Makefile` **and** in `compose/docker-compose.norebuild.yml`
+- `make awslogin` (and wait a while until your image has been uploaded)
+
+
 ## Note
 By default the Access Proxy does NOT configure TLS (HTTPS). This is up to you to either front it with an AWS ELB that
 supports TLS, or to configure TLS. It is **very, very strongly** discouraged to run this access proxy without TLS. In
