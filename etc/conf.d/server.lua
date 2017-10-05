@@ -38,6 +38,6 @@ opts = {
   iat_slack = 600,
   redirect_uri_scheme = "https",
   logout_path = "/logout",
-  redirect_after_logout_uri = "https://sso.mozilla.com/logout",
+  redirect_after_logout_uri = "https://sso.mozilla.com/forbidden",
   refresh_session_interval = 900
 }
