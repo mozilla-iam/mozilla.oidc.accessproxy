@@ -56,10 +56,20 @@ end
 ngx.req.set_header("X-Forwarded-Groups", grps)
 
 -- Access control: only allow specific users in (this is optional, without it all authenticated users are allowed in)
--- if not usergrp.ssh_allowed then
---   ngx.log(ngx.ERR, "Permission denied for user: "+session.data.user.user_id)
---   if session ~= nil then
---     session:destroy()
---   end
---   ngx.redirect(opts.logout_path)
--- end
+local allowed_group = os.getenv('allowed_group')
+if allowed_group then
+    local authorized = false
+    for _, group in ipairs(usergrp) do
+        if group == allowed_group then
+            authorized = true
+        end
+    end
+
+    if not authorized then
+      ngx.log(ngx.ERR, "Permission denied for user")
+      if session ~= nil then
+        session:destroy()
+      end
+        ngx.redirect(opts.logout_path)
+    end
+end

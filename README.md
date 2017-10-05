@@ -16,11 +16,13 @@ For testing, or if not using credstash you can also pass secret through environm
   `https://auth.mozilla.auth0.com/.well-known/openid-configuration`
 - `client_id`: This is your OIDC identifier.
 - `client_secret`: This is your shared OIDC secret.
+- `backend`: This is the service to proxy.
+- `allowed_group`: If set, only allow users in this group to log in.
 
 You can manually start this as such, if you like:
 
 ```
-$ docker run -p 8080:80 -e discovery_url=localhost -e client_id=1 -e client_secret=1 -ti openresty.mozilla.accessproxy:latest
+$ docker run -p 8080:80 -e discovery_url=localhost -e backend=http://localhost:5000 -e client_id=1 -e client_secret=1 -ti openresty.mozilla.accessproxy:latest
 ```
 
 ### AWS Deployment
