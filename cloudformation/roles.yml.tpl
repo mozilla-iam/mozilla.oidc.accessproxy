@@ -79,33 +79,6 @@ Resources:
       Roles:
         -
           Ref: $NAME$Role
-  $NAME$SQSSend:
-    Type: "AWS::IAM::Policy"
-    DependsOn: $NAME$Role
-    Properties:
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          -
-            Effect: "Allow"
-            Action:
-              - "sqs:ChangeMessageVisibility"
-              - "sqs:ChangeMessageVisibilityBatch"
-              - "sqs:CreateQueue"
-              - "sqs:GetQueueAttributes"
-              - "sqs:GetQueueUrl"
-              - "sqs:ListDeadLetterSourceQueues"
-              - "sqs:ListQueues"
-              - "sqs:PurgeQueue"
-              - "sqs:ReceiveMessage"
-              - "sqs:SendMessage"
-              - "sqs:SendMessageBatch"
-              - "sqs:SetQueueAttributes"
-            Resource: "arn:aws:sqs:us-west-2:*:$NAME$-fluentd-sqs"
-      PolicyName: $NAME$-sqs-send
-      Roles:
-        -
-          Ref: $NAME$Role
   $NAME$CredstashRead:
     Type: "AWS::IAM::Policy"
     DependsOn: $NAME$Role

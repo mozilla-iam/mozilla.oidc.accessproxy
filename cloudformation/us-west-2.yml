@@ -261,15 +261,12 @@ Resources:
           repo_upgrade: all
           runcmd:
             - REGION=$(curl 169.254.169.254/latest/meta-data/placement/availability-zone/ | sed 's/[a-z]$//')
-            - yum update -y
-            - yum install ruby wget make -y
+            - yum -y update
+            - yum -y make
             - cd /home/ec2-user
             - pip install boto3 --upgrade
-            - wget https://aws-codedeploy-$REGION.s3.amazonaws.com/latest/install
-            - chmod +x ./install
-            - ./install auto
+            - curl https://aws-codedeploy-$REGION.s3.amazonaws.com/latest/install | bash -s auto
             - aws ecr get-login --region us-west-2 | bash
-            - docker run -d -e SQS_QUEUE=OIDCAccessProxy-fluentd-sqs -v /var/log:/var/log 656532927350.dkr.ecr.us-west-2.amazonaws.com/sqs-fluentd:latest td-agent -c /etc/td-agent/td-agent.conf
             - mkdir /home/ec2-user/app
             - cd /home/ec2-user/app
             - git clone https://github.com/mozilla-iam/mozilla.oidc.accessproxy git
@@ -294,15 +291,12 @@ Resources:
           repo_upgrade: all
           runcmd:
             - REGION=$(curl 169.254.169.254/latest/meta-data/placement/availability-zone/ | sed 's/[a-z]$//')
-            - yum update -y
-            - yum install ruby wget make -y
+            - yum -y update
+            - yum -y make
             - cd /home/ec2-user
             - pip install boto3 --upgrade
-            - wget https://aws-codedeploy-$REGION.s3.amazonaws.com/latest/install
-            - chmod +x ./install
-            - ./install auto
+            - curl https://aws-codedeploy-$REGION.s3.amazonaws.com/latest/install | bash -s auto
             - aws ecr get-login --region us-west-2 | bash
-            - docker run -d -e SQS_QUEUE=OIDCAccessProxy-fluentd-sqs -v /var/log:/var/log 656532927350.dkr.ecr.us-west-2.amazonaws.com/sqs-fluentd:latest td-agent -c /etc/td-agent/td-agent.conf
             - mkdir /home/ec2-user/app
             - cd /home/ec2-user/app
             - git clone https://github.com/mozilla-iam/mozilla.oidc.accessproxy git

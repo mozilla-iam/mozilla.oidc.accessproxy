@@ -14,7 +14,6 @@ Resources:
                 - "ec2.amazonaws.com"
             Action:
               - "sts:AssumeRole"
-      RoleName: OIDCAccessProxy-Role
   OIDCAccessProxyInstanceProfile:
     Type: "AWS::IAM::InstanceProfile"
     DependsOn: OIDCAccessProxyRole
@@ -79,33 +78,6 @@ Resources:
       Roles:
         -
           Ref: OIDCAccessProxyRole
-  OIDCAccessProxySQSSend:
-    Type: "AWS::IAM::Policy"
-    DependsOn: OIDCAccessProxyRole
-    Properties:
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          -
-            Effect: "Allow"
-            Action:
-              - "sqs:ChangeMessageVisibility"
-              - "sqs:ChangeMessageVisibilityBatch"
-              - "sqs:CreateQueue"
-              - "sqs:GetQueueAttributes"
-              - "sqs:GetQueueUrl"
-              - "sqs:ListDeadLetterSourceQueues"
-              - "sqs:ListQueues"
-              - "sqs:PurgeQueue"
-              - "sqs:ReceiveMessage"
-              - "sqs:SendMessage"
-              - "sqs:SendMessageBatch"
-              - "sqs:SetQueueAttributes"
-            Resource: "arn:aws:sqs:us-west-2:*:OIDCAccessProxy-fluentd-sqs"
-      PolicyName: OIDCAccessProxy-sqs-send
-      Roles:
-        -
-          Ref: OIDCAccessProxyRole
   OIDCAccessProxyCredstashRead:
     Type: "AWS::IAM::Policy"
     DependsOn: OIDCAccessProxyRole
@@ -156,3 +128,9 @@ Resources:
       Roles:
         -
           Ref: OIDCAccessProxyRole
+Outputs:
+    OIDCRoleName:
+        Description: "Access proxy generated role name"
+        Value: !GetAtt OIDCAccessProxyRole.Arn
+        Export:
+            Name: !Sub "${AWS::StackName}-RoleName"
