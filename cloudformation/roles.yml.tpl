@@ -14,7 +14,6 @@ Resources:
                 - "ec2.amazonaws.com"
             Action:
               - "sts:AssumeRole"
-      RoleName: $NAME$-Role
   $NAME$InstanceProfile:
     Type: "AWS::IAM::InstanceProfile"
     DependsOn: $NAME$Role
@@ -129,3 +128,9 @@ Resources:
       Roles:
         -
           Ref: $NAME$Role
+Outputs:
+    OIDCRoleName:
+        Description: "Access proxy generated role name"
+        Value: !GetAtt $NAME$Role.Arn
+        Export:
+            Name: !Sub "${AWS::StackName}-RoleName"

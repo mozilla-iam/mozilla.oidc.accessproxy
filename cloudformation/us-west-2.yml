@@ -14,7 +14,7 @@ Parameters:
     Description: Name of the existing ssh key that should have access
     Type: String
     MinLength: "1"
-    Default: akrug-key
+    Default: infosec-us-west-2-keys
   EnvType:
     Description: Environment type.
     Default: dev
