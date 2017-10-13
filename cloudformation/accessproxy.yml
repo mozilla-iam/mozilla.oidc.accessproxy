@@ -1,142 +1,135 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "$NAME$"
-Mappings:
-  dev:
-      us-west-2:
-        AMI: ami-5bc13c23
-        CertificateARN: "arn:aws:acm:us-west-2:656532927350:certificate/93b81548-c28d-4912-b621-fc6cc6b52274"
-  prod:
-      us-west-2:
-        AMI: ami-5bc13c23
-        CertificateARN: ""
+Description: "OIDCAccessProxy"
 Parameters:
+  RegionName:
+    Description: Name of the desired AWS region
+    Default: "us-west-2"
+    Type: String
+  CertificateARN:
+    Description: ACM certificate.
+    Type: String
+    Default: ""
+  GITReposURL:
+    Description: URL Of the repository to check out. It must contain a valid Docker compose file.
+    Type: String
+  MozillaGoldAMI:
+    Description: Mozilla Gold AMI file.
+    Type: String
+    Default: "ami-5bc13c23"
   SSHKeyName:
     Description: Name of the existing ssh key that should have access
     Type: String
-    MinLength: "1"
     Default: infosec-us-west-2-keys
-  EnvType:
-    Description: Environment type.
-    Default: dev
-    Type: String
-    AllowedValues:
-      - prod
-      - dev
-Conditions:
-  UseProdCondition:
-    !Equals [!Ref EnvType, prod]
-  UseDevCondition:
-    !Equals [!Ref EnvType, dev]
 Resources:
-  $NAME$InternetGateway:
+  OIDCAccessProxyInternetGateway:
     Type: "AWS::EC2::InternetGateway"
     Properties:
       Tags:
         - Key: Name
-          Value: $NAME$
-  $NAME$VPC:
+          Value: OIDCAccessProxy
+  OIDCAccessProxyVPC:
     Type: "AWS::EC2::VPC"
-    DependsOn: $NAME$InternetGateway
+    DependsOn: OIDCAccessProxyInternetGateway
     Properties:
       CidrBlock: "10.0.0.0/16"
       EnableDnsSupport: True
       EnableDnsHostnames: True
       Tags:
         - Key: Name
-          Value: $NAME$
+          Value: OIDCAccessProxy
   AttachGateway:
     Type: AWS::EC2::VPCGatewayAttachment
-    DependsOn: $NAME$VPC
+    DependsOn: OIDCAccessProxyVPC
     Properties:
       VpcId:
-        Ref: $NAME$VPC
+        Ref: OIDCAccessProxyVPC
       InternetGatewayId:
-        Ref: $NAME$InternetGateway
-  $NAME$RouteTable:
+        Ref: OIDCAccessProxyInternetGateway
+  OIDCAccessProxyRouteTable:
     Type: "AWS::EC2::RouteTable"
-    DependsOn: [ $NAME$VPC, $NAME$InternetGateway, AttachGateway ]
+    DependsOn: [ OIDCAccessProxyVPC, OIDCAccessProxyInternetGateway, AttachGateway ]
     Properties:
       VpcId:
-        Ref: $NAME$VPC
+        Ref: OIDCAccessProxyVPC
       Tags:
         - Key: Name
-          Value: $NAME$
-  $NAME$DefaultRoute:
+          Value: OIDCAccessProxy
+  OIDCAccessProxyDefaultRoute:
     Type: AWS::EC2::Route
-    DependsOn: $NAME$InternetGateway
+    DependsOn: OIDCAccessProxyInternetGateway
     Properties:
       RouteTableId:
-        Ref: $NAME$RouteTable
+        Ref: OIDCAccessProxyRouteTable
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId:
-        Ref: $NAME$InternetGateway
-  $NAME$Subnet1:
+        Ref: OIDCAccessProxyInternetGateway
+  OIDCAccessProxySubnet1:
     Type: "AWS::EC2::Subnet"
-    DependsOn: $NAME$RouteTable
+    DependsOn: OIDCAccessProxyRouteTable
     Properties:
-      AvailabilityZone: "us-west-2a"
+      AvailabilityZone: !Join [ !Ref RegionName, "a" ]
       CidrBlock: "10.0.0.0/24"
       MapPublicIpOnLaunch: True
       VpcId:
-        Ref: $NAME$VPC
+        Ref: OIDCAccessProxyVPC
       Tags:
         - Key: Name
-          Value: $NAME$ Subnet 1
-  $NAME$Subnet2:
+          Value: OIDCAccessProxy Subnet 1
+  OIDCAccessProxySubnet2:
     Type: "AWS::EC2::Subnet"
-    DependsOn: $NAME$RouteTable
+    DependsOn: OIDCAccessProxyRouteTable
     Properties:
-      AvailabilityZone: "us-west-2b"
+      AvailabilityZone: !Join [ !Ref RegionName, "b" ]
       CidrBlock: "10.0.1.0/24"
       MapPublicIpOnLaunch: True
       VpcId:
-        Ref: $NAME$VPC
+        Ref: OIDCAccessProxyVPC
       Tags:
         - Key: Name
-          Value: $NAME$ Subnet 2
-  $NAME$Subnet3:
+          Value: OIDCAccessProxy Subnet 2
+  OIDCAccessProxySubnet3:
     Type: "AWS::EC2::Subnet"
-    DependsOn: $NAME$RouteTable
+    DependsOn: OIDCAccessProxyRouteTable
     Properties:
-      AvailabilityZone: "us-west-2c"
+      AvailabilityZone: !Join [ !Ref RegionName, "c" ]
       CidrBlock: "10.0.2.0/24"
       MapPublicIpOnLaunch: True
       VpcId:
-        Ref: $NAME$VPC
+        Ref: OIDCAccessProxyVPC
       Tags:
         - Key: Name
-          Value: $NAME$ Subnet 3
-  $NAME$RouteAssoc1:
+          Value: OIDCAccessProxy Subnet 3
+  OIDCAccessProxyRouteAssoc1:
     Type: "AWS::EC2::SubnetRouteTableAssociation"
-    DependsOn: $NAME$DefaultRoute
+    DependsOn: OIDCAccessProxyDefaultRoute
     Properties:
       RouteTableId:
-        Ref: $NAME$RouteTable
+        Ref: OIDCAccessProxyRouteTable
       SubnetId:
-        Ref: $NAME$Subnet1
-  $NAME$RouteAssoc2:
+        Ref: OIDCAccessProxySubnet1
+  OIDCAccessProxyRouteAssoc2:
     Type: "AWS::EC2::SubnetRouteTableAssociation"
-    DependsOn: $NAME$DefaultRoute
+    DependsOn: OIDCAccessProxyDefaultRoute
     Properties:
       RouteTableId:
-        Ref: $NAME$RouteTable
+        Ref: OIDCAccessProxyRouteTable
       SubnetId:
-        Ref: $NAME$Subnet2
-  $NAME$RouteAssoc3:
+        Ref: OIDCAccessProxySubnet2
+  OIDCAccessProxyRouteAssoc3:
     Type: "AWS::EC2::SubnetRouteTableAssociation"
-    DependsOn: $NAME$DefaultRoute
+    DependsOn: OIDCAccessProxyDefaultRoute
     Properties:
       RouteTableId:
-        Ref: $NAME$RouteTable
+        Ref: OIDCAccessProxyRouteTable
       SubnetId:
-        Ref: $NAME$Subnet3
-  $NAME$SecGroup:
+        Ref: OIDCAccessProxySubnet3
+  OIDCAccessProxySecGroup:
     Type: "AWS::EC2::SecurityGroup"
-    DependsOn: $NAME$VPC
+    DependsOn: OIDCAccessProxyVPC
     Properties:
-      GroupDescription: "Allows ports to web instances of $NAME$ from ELB."
+      GroupDescription: "Allows ports to web instances of OIDCAccessProxy from ELB."
       VpcId:
-        Ref: $NAME$VPC
+        Ref: OIDCAccessProxyVPC
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: '80'
@@ -148,14 +141,14 @@ Resources:
           CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
-          Value: $NAME$
-  $NAME$ELBSecGroup:
+          Value: OIDCAccessProxy
+  OIDCAccessProxyELBSecGroup:
     Type: "AWS::EC2::SecurityGroup"
-    DependsOn: $NAME$VPC
+    DependsOn: OIDCAccessProxyVPC
     Properties:
       GroupDescription: "Allows access to the ELB listeners."
       VpcId:
-        Ref: $NAME$VPC
+        Ref: OIDCAccessProxyVPC
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: '443'
@@ -171,21 +164,21 @@ Resources:
           CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
-          Value: $NAME$ ELB
+          Value: OIDCAccessProxy ELB
   ApplicationLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-    DependsOn: $NAME$ELBSecGroup
+    DependsOn: OIDCAccessProxyELBSecGroup
     Properties:
       Scheme: internet-facing
       Subnets:
-        - Ref: $NAME$Subnet1
-        - Ref: $NAME$Subnet2
-        - Ref: $NAME$Subnet3
+        - Ref: OIDCAccessProxySubnet1
+        - Ref: OIDCAccessProxySubnet2
+        - Ref: OIDCAccessProxySubnet3
       SecurityGroups:
-        - Ref: $NAME$ELBSecGroup
+        - Ref: OIDCAccessProxyELBSecGroup
       Tags:
         - Key: Name
-          Value: $NAME$
+          Value: OIDCAccessProxy
   ALBHTTPListener:
     Type : AWS::ElasticLoadBalancingV2::Listener
     DependsOn: ApplicationLoadBalancer
@@ -203,7 +196,7 @@ Resources:
     DependsOn: ApplicationLoadBalancer
     Properties:
       Certificates:
-        - CertificateArn: !FindInMap [!Ref EnvType, !Ref "AWS::Region", CertificateARN]
+        - CertificateArn: !Ref CertificateARN
       DefaultActions:
       - Type: forward
         TargetGroupArn:
@@ -222,14 +215,14 @@ Resources:
       UnhealthyThresholdCount: 2
       HealthCheckPath: /health
       HealthCheckPort: 80
-      Name: $NAME$HTTPs
+      Name: OIDCAccessProxyHTTPs
       Port: 80
       Protocol: HTTP
       VpcId:
-        Ref: $NAME$VPC
+        Ref: OIDCAccessProxyVPC
       Tags:
         - Key: Name
-          Value: $NAME$
+          Value: OIDCAccessProxy
   ALBTargetGroup1:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     DependsOn: ApplicationLoadBalancer
@@ -239,71 +232,40 @@ Resources:
       UnhealthyThresholdCount: 2
       HealthCheckPath: /health
       HealthCheckPort: 80
-      Name: $NAME$HTTP
+      Name: OIDCAccessProxyHTTP
       Port: 80
       Protocol: HTTP
       VpcId:
-        Ref: $NAME$VPC
+        Ref: OIDCAccessProxyVPC
       Tags:
         - Key: Name
-          Value: $NAME$
-  $NAME$LaunchConfigProd:
+          Value: OIDCAccessProxy
+  OIDCAccessProxyLaunchConfig:
     Type: "AWS::AutoScaling::LaunchConfiguration"
-    Condition: UseProdCondition
+    DependsOn: [ OIDCAccessProxySubnet1, OIDCAccessProxySubnet2, OIDCAccessProxySubnet3 ]
     Properties:
       KeyName: !Ref SSHKeyName
-      ImageId: !FindInMap [!Ref EnvType, !Ref "AWS::Region", AMI]
-      IamInstanceProfile: "$NAME$-instance-profile"
+      ImageId: !Ref MozillaGoldAMI
+      IamInstanceProfile: "OIDCAccessProxy-instance-profile"
       UserData:
         Fn::Base64: !Sub |
           #cloud-config
           repo_update: true
           repo_upgrade: all
           runcmd:
-            - REGION=$(curl 169.254.169.254/latest/meta-data/placement/availability-zone/ | sed 's/[a-z]$//')
             - yum -y update
             - yum -y make
             - cd /home/ec2-user
             - pip install boto3 --upgrade
-            - curl https://aws-codedeploy-$REGION.s3.amazonaws.com/latest/install | bash -s auto
-            - aws ecr get-login --region us-west-2 | bash
+            - curl https://aws-codedeploy-${RegionName}.s3.amazonaws.com/latest/install | bash -s auto
+            - aws ecr get-login --region ${RegionName} | bash
             - mkdir /home/ec2-user/app
             - cd /home/ec2-user/app
-            - git clone $GIT_URL$ git
-            - git checkout production
-            - cd /home/ec2-user/app/git/
-            - make compose-production
-      SecurityGroups:
-        - Ref: $NAME$SecGroup
-      InstanceType: "t2.medium"
-  $NAME$LaunchConfigDev:
-    Type: "AWS::AutoScaling::LaunchConfiguration"
-    Condition: UseDevCondition
-    DependsOn: [ $NAME$Subnet1, $NAME$Subnet2, $NAME$Subnet3 ]
-    Properties:
-      KeyName: !Ref SSHKeyName
-      ImageId: !FindInMap [!Ref EnvType, !Ref "AWS::Region", AMI]
-      IamInstanceProfile: "$NAME$-instance-profile"
-      UserData:
-        Fn::Base64: !Sub |
-          #cloud-config
-          repo_update: true
-          repo_upgrade: all
-          runcmd:
-            - REGION=$(curl 169.254.169.254/latest/meta-data/placement/availability-zone/ | sed 's/[a-z]$//')
-            - yum -y update
-            - yum -y make
-            - cd /home/ec2-user
-            - pip install boto3 --upgrade
-            - curl https://aws-codedeploy-$REGION.s3.amazonaws.com/latest/install | bash -s auto
-            - aws ecr get-login --region us-west-2 | bash
-            - mkdir /home/ec2-user/app
-            - cd /home/ec2-user/app
-            - git clone $GIT_URL$ git
+            - git clone ${GITReposURL} git
             - cd /home/ec2-user/app/git
             - make compose-staging
       SecurityGroups:
-        - Ref: $NAME$SecGroup
+        - Ref: OIDCAccessProxySecGroup
       InstanceType: "t2.medium"
   HTTPsListenerRule:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
@@ -333,18 +295,18 @@ Resources:
       ListenerArn:
         Ref: ALBHTTPListener
       Priority: 1
-  $NAME$ASG:
+  OIDCAccessProxyASG:
     Type: "AWS::AutoScaling::AutoScalingGroup"
-    DependsOn: [ $NAME$Subnet1, $NAME$Subnet2, $NAME$Subnet3 ]
+    DependsOn: [ OIDCAccessProxySubnet1, OIDCAccessProxySubnet2, OIDCAccessProxySubnet3 ]
     Properties:
       Tags:
         -
           Key: Application
-          Value: $NAME$
+          Value: OIDCAccessProxy
           PropagateAtLaunch: true
         -
           Key: Name
-          Value: $NAME$-Worker
+          Value: OIDCAccessProxy-Worker
           PropagateAtLaunch: true
       TargetGroupARNs:
          - Ref: ALBTargetGroup
@@ -352,8 +314,7 @@ Resources:
       MaxSize: "5"
       MinSize: "3"
       VPCZoneIdentifier:
-        - Ref: $NAME$Subnet1
-        - Ref: $NAME$Subnet2
-        - Ref: $NAME$Subnet3
-      LaunchConfigurationName:
-        !If [UseProdCondition, Ref: $NAME$LaunchConfigProd, Ref: $NAME$LaunchConfigDev]
+        - Ref: OIDCAccessProxySubnet1
+        - Ref: OIDCAccessProxySubnet2
+        - Ref: OIDCAccessProxySubnet3
+      LaunchConfigurationName: "OIDCAccessProxyLaunchConfig"

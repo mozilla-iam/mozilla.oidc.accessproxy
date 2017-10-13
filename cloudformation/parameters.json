@@ -1,0 +1,27 @@
+[
+    {
+        "ParameterKey": "SSHKeyName",
+        "ParameterValue": "infosec-us-west-2-keys",
+        "UsePreviousValue": false
+    },
+    {
+        "ParameterKey": "GITReposURL",
+        "ParameterValue": "https://github.com/mozilla-iam/mozilla.oidc.accessproxy",
+        "UsePreviousValue": false
+    },
+    {
+        "ParameterKey": "CertificateARN",
+        "ParameterValue": "arn:aws:acm:us-west-2:656532927350:certificate/93b81548-c28d-4912-b621-fc6cc6b52274",
+        "UsePreviousValue": false
+    },
+    {
+        "ParameterKey": "MozillaGoldAMI",
+        "ParameterValue": "ami-5bc13c23",
+        "UsePreviousValue": false
+    },
+    {
+        "ParameterKey": "Region",
+        "ParameterValue": "us-west-2",
+        "UsePreviousValue": false
+    }
+]
