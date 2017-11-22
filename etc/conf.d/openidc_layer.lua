@@ -47,7 +47,7 @@ local gprs = ""
 local usergrp = ""
 if session.data.user.groups then
     usergrp = session.data.user.groups
-else
+elseif session.data.user['https://sso.mozilla.com/claim/groups'] then
     usergrp = session.data.user['https://sso.mozilla.com/claim/groups']
 end
 for k,v in pairs(usergrp) do
