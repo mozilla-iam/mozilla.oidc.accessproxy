@@ -50,8 +50,10 @@ if session.data.user.groups then
 elseif session.data.user['https://sso.mozilla.com/claim/groups'] then
     usergrp = session.data.user['https://sso.mozilla.com/claim/groups']
 end
-for k,v in pairs(usergrp) do
-  grps = grps and grps.."|"..v or v
+if not usergrp == "" or not usergrp == nil then
+    for k,v in pairs(usergrp) do
+      grps = grps and grps.."|"..v or v
+    end
 end
 ngx.req.set_header("X-Forwarded-Groups", grps)
 
