@@ -43,7 +43,7 @@ ngx.req.set_header("OIDC_CLAIM_ID_TOKEN", session.data.enc_id_token)
 ngx.req.set_header("via",session.data.user.email)
 
 -- Flatten groups for apps that won't read JSON
-local gprs = ""
+local grps = ""
 local usergrp = ""
 if session.data.user.groups then
     usergrp = session.data.user.groups
