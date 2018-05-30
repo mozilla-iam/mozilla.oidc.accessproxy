@@ -36,7 +36,6 @@ opts = {
   discovery = cs_get(app_name..".discovery_url"),
   client_id = cs_get(app_name..".client_id"),
   client_secret = cs_get(app_name..".client_secret"),
-  scope = "openid email profile",
   iat_slack = 600,
   redirect_uri_scheme = "https",
   logout_path = "/logout",
@@ -48,8 +47,11 @@ opts = {
   -- or understand the consequences of not doing so.
   --
   --renew_access_token_on_expiry = true
-  --access_token_expires_in = 900
-  --access_token_expires_leeway = 60
+  --access_token_expires_in = 900,
+  --access_token_expires_leeway = 60,
+  -- If using renew_access_token_on_expiry you may need a specific scope to request a refresh token
+  --scope = "openid email profile offline_access",
+  scope = "openid email profile",
   refresh_session_interval = 900
   --proxy_opts = {
   -- http_proxy  = "http://insert_proxy_hostname:3128",
