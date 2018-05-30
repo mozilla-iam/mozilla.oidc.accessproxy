@@ -3,8 +3,8 @@ Wow that's a lot of words. What this is a reverse proxy that stands in front of 
 no exception.
 While doing so it can either pass ("whitelist") or require authentication, from an OIDC (OpenID Connect) provider.
 
-This proxy use the OpenResty version of Nginx, that has Lua support, and uses the `lua-resty-openidc` library for
-authentication, as well as `credstash` to fetch credentials as needed.
+This proxy use the OpenResty version of Nginx, that has Lua support, and uses the [`lua-resty-openidc`](https://github.com/zmartzone/lua-resty-openidc) library for
+authentication, as well as [`credstash`](https://github.com/fugue/credstash) to fetch credentials as needed.
 
 ## Setup
 - Edit etc/conf.d/server.lua to your liking (in particular `app_name` and maybe `opts`)
