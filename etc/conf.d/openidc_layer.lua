@@ -43,7 +43,7 @@ ngx.req.set_header("OIDC_CLAIM_ID_TOKEN", session.data.enc_id_token)
 ngx.req.set_header("via",session.data.user.email)
 
 -- Flatten groups for apps that won't read JSON
-local grps = ""
+local grps = false
 local usergrp = ""
 if session.data.user.groups then
     usergrp = session.data.user.groups
@@ -52,7 +52,7 @@ elseif session.data.user['https://sso.mozilla.com/claim/groups'] then
 end
 if usergrp ~= "" and usergrp ~= nil then
     for k,v in pairs(usergrp) do
-      grps = grps and grps.."|"..v or v
+      grps = (grps and grps.."|"..v) or v  -- If grps is false, set grps to v, otherwise append "|v" to grps
     end
 end
 ngx.req.set_header("X-Forwarded-Groups", grps)
