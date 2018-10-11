@@ -13,6 +13,9 @@ help:
 build: Dockerfile
 	docker build --build-arg GITCACHE=$(shell date +%s) -t $(IMAGE_NAME) .
 
+build-fake_api: fake_api/Dockerfile
+	docker build --build-arg GITCACHE=$(shell date +%s) -t "$(IMAGE_NAME)-fake_api" fake_api/
+
 compose: compose/docker-compose.base.yml
 	touch compose/local.env
 	docker-compose -f compose/docker-compose.base.yml -f compose/docker-compose.rebuild.yml -f compose/docker-compose.dev.yml $(COMPOSE_CMD)
