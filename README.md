@@ -26,6 +26,10 @@ You can manually start this as such, if you like:
 $ docker run -p 8080:80 -e discovery_url=localhost -e backend=http://localhost:5000 -e client_id=1 -e client_secret=1 -ti openresty.mozilla.accessproxy:latest
 ```
 
+## API Proxying
+You can proxy APIs (specially useful for SPAs) by using `make build-fake_api` and `make compose-api`.
+This will create a fake API for demonstration purposes and run the proxy in front of it.
+
 ### AWS Deployment
 
 - Read `cloudformation/README.md` and follow it's instructions
