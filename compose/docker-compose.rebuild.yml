@@ -5,3 +5,7 @@ services:
             context: ../
             dockerfile: Dockerfile
         image: mozilla.oidc.accessproxy:latest
+    api:
+        build:
+            context: ../fake_api
+        image: mozilla.oidc.accessproxy-fake_api:latest

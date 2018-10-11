@@ -7,4 +7,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 8080
 STOPSIGNAL SIGTERM
-CMD [ "gunicorn", "--bind", "0.0.0.0:8080","wsgi:app" ]
+CMD [ "python", "app.py" ]

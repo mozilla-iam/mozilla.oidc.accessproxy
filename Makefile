@@ -20,6 +20,11 @@ compose: compose/docker-compose.base.yml
 	touch compose/local.env
 	docker-compose -f compose/docker-compose.base.yml -f compose/docker-compose.rebuild.yml -f compose/docker-compose.dev.yml $(COMPOSE_CMD)
 
+compose-api: compose/docker-compose.api.yml
+	touch compose/local.env
+	docker-compose -f compose/docker-compose.base.yml -f compose/docker-compose.rebuild.yml -f compose/docker-compose.dev.yml \
+	  -f compose/docker-compose.api.yml $(COMPOSE_CMD)
+
 compose-detach: compose/docker-compose.base.yml
 	touch compose/local.env
 	docker-compose -f compose/docker-compose.base.yml -f compose/docker-compose.rebuild.yml -f compose/docker-compose.dev.yml $(COMPOSE_CMD) -d
