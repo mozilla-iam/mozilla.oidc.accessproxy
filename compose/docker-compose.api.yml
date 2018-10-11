@@ -1,0 +1,10 @@
+version: '2'
+services:
+  api:
+    restart: always
+    links:
+      - accessproxy
+    ports:
+      - 8080:8080
+    networks:
+      - default
