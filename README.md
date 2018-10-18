@@ -19,11 +19,12 @@ For testing, or if not using credstash you can also pass secret through environm
 - `backend`: This is the service to proxy.
 - `allowed_group`: If set, only allow users in this group to log in.
 - `redirect_uri_path`: This is where the OIDC provider will redirect to after authentication.  
+- `httpsredir`: If set to `no` then http will not redirect automatically to https.
 
 You can manually start this as such, if you like:
 
 ```
-$ docker run -p 8080:80 -e discovery_url=localhost -e backend=http://localhost:5000 -e client_id=1 -e client_secret=1 -ti openresty.mozilla.accessproxy:latest
+$ docker run -p 8080:80 -e discovery_url=localhost -e backend=http://localhost:5000 -e client_id=1 -e client_secret=1 -ti mozilla.oidc.accessproxy:latest
 ```
 
 ### AWS Deployment
