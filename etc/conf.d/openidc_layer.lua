@@ -54,8 +54,8 @@ if usergrp ~= "" and usergrp ~= nil then
     for k,v in pairs(usergrp) do
       grps = (grps and grps.."|"..v) or v  -- If grps is false, set grps to v, otherwise append "|v" to grps
     end
+    ngx.req.set_header("X-Forwarded-Groups", grps)
 end
-ngx.req.set_header("X-Forwarded-Groups", grps)
 
 -- Access control: only allow specific users in (this is optional, without it all authenticated users are allowed in)
 local allowed_group = os.getenv('allowed_group')
