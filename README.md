@@ -20,6 +20,9 @@ For testing, or if not using credstash you can also pass secret through environm
 - `allowed_group`: If set, only allow users in this group to log in.
 - `redirect_uri_path`: This is where the OIDC provider will redirect to after authentication.  
 - `httpsredir`: If set to `no` then http will not redirect automatically to https.
+- `cookiename`: Sets the cookie/session name. Useful if you run multiple proxies with the same domain but different
+  ports
+- `sessionsecret`: Sets a session secret.
 
 You can manually start this as such, if you like:
 
