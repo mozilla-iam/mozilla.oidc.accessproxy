@@ -11,7 +11,7 @@
     },
     {
         "ParameterKey": "CertificateARN",
-        "ParameterValue": "arn:aws:acm:us-west-2:656532927350:certificate/93b81548-c28d-4912-b621-fc6cc6b52274",
+        "ParameterValue": "ACM Certificat ARN goes here",
         "UsePreviousValue": false
     },
     {
