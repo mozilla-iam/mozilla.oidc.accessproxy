@@ -3,14 +3,14 @@ Wow that's a lot of words. What this is a reverse proxy that stands in front of 
 no exception.
 While doing so it can either pass ("whitelist") or require authentication, from an OIDC (OpenID Connect) provider.
 
-This proxy use the OpenResty version of Nginx, that has Lua support, and uses the [`lua-resty-openidc`](https://github.com/zmartzone/lua-resty-openidc) library for
+This proxy uses the OpenResty version of Nginx, that has Lua support, and uses the [`lua-resty-openidc`](https://github.com/zmartzone/lua-resty-openidc) library for
 authentication, as well as [`credstash`](https://github.com/fugue/credstash) to fetch credentials as needed.
 
 ## Setup
-- Edit etc/conf.d/server.lua to your liking (in particular `app_name` and maybe `opts`)
+- Edit `etc/conf.d/server.lua` to your liking (in particular `app_name` and maybe `opts`)
 - Ensure you have the same secrets configured in credstash on your AWS instance, if you plan to use that
 
-For testing, or if not using credstash you can also pass secret through environment variables:
+For testing, or if credstash isn't being used, you can also pass secrets through environment variables:
 
 - `discovery_url`: This is the well-known URL for your OIDC provider, such as
   `https://auth.mozilla.auth0.com/.well-known/openid-configuration`
@@ -27,7 +27,8 @@ For testing, or if not using credstash you can also pass secret through environm
 You can manually start this as such, if you like:
 
 ```
-$ docker run -p 8080:80 -e discovery_url=localhost -e backend=http://localhost:5000 -e client_id=1 -e client_secret=1 -ti mozilla.oidc.accessproxy:latest
+$ make build
+$ make run
 ```
 
 ### AWS Deployment
@@ -44,3 +45,13 @@ By default the Access Proxy does NOT configure TLS (HTTPS). This is up to you to
 supports TLS, or to configure TLS. It is **very, very strongly** discouraged to run this access proxy without TLS. In
 other words, do not do that, it's a terrible idea and will lead to compromise of your service.
 If you need a certificate get it from LetsEncrypt for free.
+
+## Config Structure
+
+* `nginx.conf`
+  * `conf.d/nginx_lua.conf`
+  * `conf.d/headers.conf`
+  * `conf.d/server.conf`
+    * `conf.d/proxy_auth_bypass.conf` : optional
+    * `conf.d/server.lua` : set the `opts` settings
+    * `conf.d/openidc_layer.lua` : use `resty.openidc` to do OIDC auth
