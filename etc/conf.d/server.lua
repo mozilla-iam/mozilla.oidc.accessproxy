@@ -52,9 +52,9 @@ opts = {
   -- If using renew_access_token_on_expiry you may need a specific scope to request a refresh token
   --scope = "openid email profile offline_access",
   scope = "openid email profile",
-  refresh_session_interval = 900
   --proxy_opts = {
   -- http_proxy  = "http://insert_proxy_hostname:3128",
   -- https_proxy = "http://insert_proxy_hostname:3128"
-  --}
+  --},
+  refresh_session_interval = 900
 }
