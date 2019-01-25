@@ -18,7 +18,6 @@ For testing, or if credstash isn't being used, you can also pass secrets through
 - `client_secret`: This is your shared OIDC secret.
 - `backend`: This is the service to proxy.
 - `allowed_group`: If set, only allow users in this group to log in.
-- `redirect_uri_path`: This is where the OIDC provider will redirect to after authentication.  
 - `httpsredir`: If set to `yes` then http will redirect automatically to https, otherwise it won't. (default: `yes`).
 - `cookiename`: Sets the cookie/session name. Useful if you run multiple proxies with the same domain but different
   ports
