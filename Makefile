@@ -1,7 +1,15 @@
-IMAGE_NAME	:= "mozilla.oidc.accessproxy"
-PORTS		:= "8080:80"
-HUB_URL		:= "656532927350.dkr.ecr.us-west-2.amazonaws.com"
-COMPOSE_CMD	:= "up"
+IMAGE_NAME		:= "mozilla.oidc.accessproxy"
+PORTS			:= "-p 80:80 -p 443:443"
+HUB_URL			:= "656532927350.dkr.ecr.us-west-2.amazonaws.com"
+COMPOSE_CMD		:= "up"
+discovery_url	:=
+backend     	:= "http://localhost:5000"
+client_id   	:=
+client_secret	:=
+httpsredir		:= "yes"
+sessionsecret	:=
+cookiename		:= "session"
+allowed_group	:=
 
 all: help
 
@@ -19,7 +27,7 @@ compose: compose/docker-compose.base.yml
 
 compose-detach: compose/docker-compose.base.yml
 	touch compose/local.env
-	docker-compose -f compose/docker-compose.base.yml -f compose/docker-compose.rebuild.yml -f compose/docker-compose.dev.yml $(COMPOSE_CMD) -d
+	docker-compose -f compose/docker-compose.base.yml -f compose/docker-compose.rebuild.yml -f compose/docker-compose.dev.yml $(COMPOSE_CMD) --detach
 
 compose-staging: compose/docker-compose.base.yml
 	touch compose/local.env
@@ -30,7 +38,17 @@ compose-production: compose/docker-compose.base.yml
 	docker-compose -f compose/docker-compose.base.yml -f compose/docker-compose.norebuild.yml -f compose/docker-compose.prod.yml $(COMPOSE_CMD)
 
 run: Dockerfile
-	docker run -i -p $(PORTS)  -t $(IMAGE_NAME)
+	docker run -i \
+	  $(PORTS) \
+	  -e discovery_url \
+	  -e backend \
+	  -e client_id \
+	  -e client_secret \
+	  -e httpsredir \
+	  -e sessionsecret \
+	  -e cookiename \
+	  -e allowed_group \
+	  -t $(IMAGE_NAME)
 
 hublogin: Dockerfile build tag
 	docker login
