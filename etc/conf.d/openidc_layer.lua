@@ -1,5 +1,5 @@
 -- Lua reference for nginx: https://github.com/openresty/lua-nginx-module
--- Lua reference for openidc: https://github.com/pingidentity/lua-resty-openidc
+-- Lua reference for openidc: https://github.com/zmartzone/lua-resty-openidc
 local oidc = require("resty.openidc")
 local cjson = require( "cjson" )
 
