@@ -1,5 +1,5 @@
 IMAGE_NAME		:= "mozilla.oidc.accessproxy"
-PORTS			:= "-p 80:80 -p 443:443"
+PORTS			:= -p 80:80 -p 443:443
 HUB_URL			:= "656532927350.dkr.ecr.us-west-2.amazonaws.com"
 COMPOSE_CMD		:= "up"
 discovery_url	:=
