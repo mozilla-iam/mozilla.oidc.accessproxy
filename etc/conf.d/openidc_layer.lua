@@ -40,7 +40,7 @@ end
 ngx.req.set_header("REMOTE_USER", session.data.user.email)
 ngx.req.set_header("REMOTE_USER_SUB", session.data.user.sub)
 ngx.req.set_header("X-Forwarded-User", session.data.user.email)
-ngx.req.set_header("X-Forwarded-User-subject", session.data.user.sub)
+ngx.req.set_header("X-Forwarded-User-Subject", session.data.user.sub)
 ngx.req.set_header("OIDC_CLAIM_ACCESS_TOKEN", session.data.access_token)
 ngx.req.set_header("OIDC_CLAIM_ID_TOKEN", session.data.enc_id_token)
 ngx.req.set_header("via",session.data.user.email)
