@@ -11,8 +11,8 @@ RUN gpg="gpg --no-default-keyring --secret-keyring /dev/null --keyring /dev/null
     rpm -qi gpg-pubkey-d5edeb74 | $gpg | grep 0x97DB7443D5EDEB74 && \
     yum-config-manager --add-repo https://openresty.org/package/centos/openresty.repo && \
     yum update -y && \
-    yum install -y --setopt=tsflags=nodocs openresty-opm openresty openresty-resty&& \
-    opm get zmartzone/lua-resty-openidc && \
+    yum install -y --setopt=tsflags=nodocs openresty-opm openresty openresty-resty && \
+    opm get zmartzone/lua-resty-openidc=1.6.1 && \
     yum erase -y openresty-opm && \
     yum install -y --setopt=tsflags=nodocs epel-release && \
     yum install -y --setopt=tsflags=nodocs python-pip && \
