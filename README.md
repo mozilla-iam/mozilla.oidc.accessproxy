@@ -23,6 +23,8 @@ For testing, or if credstash isn't being used, you can also pass secrets through
   ports
 - `sessionsecret`: Sets a session secret.
 
+The Callback URL that the Mozilla OIDC Access Proxy uses is [`/redirect_uri`](https://github.com/mozilla-iam/mozilla.oidc.accessproxy/blob/76c7ef9b40a2f983b902977bafebc9e688e1ab61/etc/conf.d/server.lua#L35). You can provide this to the identity provider to add into the list of allowed callback URLs.
+
 You can manually start this as such, if you like:
 
 ```
